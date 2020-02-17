@@ -1,0 +1,522 @@
+%% Ievads simboliskaja matematika
+% piemers
+syms a11 a12 a21 a22 b11 b12 b21 b22
+A = [a11 a12 ; a21 a22];
+B = [b11 b12 ; b21 b22];
+A
+ 
+A =
+ 
+[ a11, a12]
+[ a21, a22]
+ 
+B
+ 
+B =
+ 
+[ b11, b12]
+[ b21, b22]
+ 
+C = A*B
+ 
+C =
+ 
+[ a11*b11 + a12*b21, a11*b12 + a12*b22]
+[ a21*b11 + a22*b21, a21*b12 + a22*b22]
+ 
+D = A.*B
+ 
+D =
+ 
+[ a11*b11, a12*b12]
+[ a21*b21, a22*b22]
+ 
+%% Kādefinēt simb. mainīgo
+% 1. piem definēsim x,y kā simb. mainīgos
+% Izmantojot "sym"
+x = sym('x');
+x = sym('y');
+%% atrast kvadrātsakni no x^2
+y = x^2; 
+z = sqrt(y)
+ 
+z =
+ 
+(y^2)^(1/2)
+ 
+x = sym('x','positive'); 
+y = x^2;
+z = sqrt(y)
+ 
+z =
+ 
+x
+ 
+x = sym('x','negative');
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('sym/assume', '/usr/local/MATLAB/R2018a/toolbox/symbolic/symbolic/@sym/sym.m', 556)" style="font-weight:bold">sym/assume</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2018a/toolbox/symbolic/symbolic/@sym/sym.m',556,0)">line 556</a>)
+Expected input to match one of these values:
+
+'integer', 'rational', 'real', 'positive', 'clear'
+
+The input, 'negative', did not match any of the valid values.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('sym', '/usr/local/MATLAB/R2018a/toolbox/symbolic/symbolic/@sym/sym.m', 231)" style="font-weight:bold">sym</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2018a/toolbox/symbolic/symbolic/@sym/sym.m',231,0)">line 231</a>)
+                    assume(S, n);
+} 
+%% Kā definēt simb mainīgo - 2
+syms x y
+% šajā rindā esm definējuši x,y kā simb. mainīgos
+syms x y positive
+syms a11 a12 a21 a22
+A = [a11 a12 ; a21 a22];
+A'
+ 
+ans =
+ 
+[ conj(a11), conj(a21)]
+[ conj(a12), conj(a22)]
+ 
+%% pateiksim ka matricas elementi ir realaie (nav kompeksie)
+syms a11 a12 a21 a22
+A = [a11 a12 ; a21 a22];
+A'
+ 
+ans =
+ 
+[ conj(a11), conj(a21)]
+[ conj(a12), conj(a22)]
+ 
+syms a11 a12 a21 a22 real
+A = [a11 a12 ; a21 a22];
+A'
+ 
+ans =
+ 
+[ a11, a21]
+[ a12, a22]
+ 
+%% Kā definēt simb. mainīgo - 3
+A = sym('a',[2 3])
+ 
+A =
+ 
+[ a1_1, a1_2, a1_3]
+[ a2_1, a2_2, a2_3]
+ 
+A = sym('a%d%D',[2 3])
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('sym>createCharMatrix', '/usr/local/MATLAB/R2018a/toolbox/symbolic/symbolic/@sym/sym.m', 1463)" style="font-weight:bold">sym>createCharMatrix</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2018a/toolbox/symbolic/symbolic/@sym/sym.m',1463,0)">line 1463</a>)
+If the second argument specifies the dimensions of the generated symbolic vector or matrix, then the first
+argument must be a character vector specifying the base name for vector or matrix elements. It must be a
+valid variable name.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('sym>tomupadWithSize', '/usr/local/MATLAB/R2018a/toolbox/symbolic/symbolic/@sym/sym.m', 1236)" style="font-weight:bold">sym>tomupadWithSize</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2018a/toolbox/symbolic/symbolic/@sym/sym.m',1236,0)">line 1236</a>)
+    S = createCharMatrix(x, n);
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('sym', '/usr/local/MATLAB/R2018a/toolbox/symbolic/symbolic/@sym/sym.m', 234)" style="font-weight:bold">sym</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2018a/toolbox/symbolic/symbolic/@sym/sym.m',234,0)">line 234</a>)
+                    S.s = tomupadWithSize(x, n);
+} 
+A = sym('a%d%d',[2 3])
+ 
+A =
+ 
+[ a11, a12, a13]
+[ a21, a22, a23]
+ 
+%% Atvasināšana
+syms x
+y = x^2;
+% ar funkciju diff veiksim atasināšanu
+diff(y)
+ 
+ans =
+ 
+2*x
+ 
+diff(x^2)
+ 
+ans =
+ 
+2*x
+ 
+%% Parcialais atvasinājums
+syms x y
+z = 3*x^5+7*y^6;
+diff(z,x)
+ 
+ans =
+ 
+15*x^4
+ 
+diff(z,y)
+ 
+ans =
+ 
+42*y^5
+ 
+%% Integrēšana
+syms x
+y = x^3;
+int(y)
+ 
+ans =
+ 
+x^4/4
+ 
+%% Noteiktais integrālis
+syms x
+int(x,x,0,3)
+ 
+ans =
+ 
+9/2
+ 
+double(int(x,x,0,3))
+
+ans =
+
+    4.5000
+
+%% atbilde pirmaja piemērā nav skaitlis, bet simb. main.
+int(x^2,x,-3,3)
+ 
+ans =
+ 
+18
+ 
+%% Robežas
+syms x
+limit(1/(x-1),x,1,'left')
+ 
+ans =
+ 
+-Inf
+ 
+% izteksme 1/(x-1), ja x teicas uz 1 no kreisās puses
+limit(1/(x-1),x,1,'right')
+ 
+ans =
+ 
+Inf
+ 
+%% Vienādojumu risināšana 
+syms x
+% x^2-7x+12=0, saknēm jābūt 3 un 4
+solve(x^2-7*x+12==0,x)
+ 
+ans =
+ 
+ 3
+ 4
+ 
+%% (...,x) lai atrastu x saknes nevis, piem., a vai b
+%% vienādojumu sistēmu risināšāna
+syms x y z
+atb = solve(x+y+z==10,x-y+z==4,x+y-z==0)
+
+atb = 
+
+  <a href="matlab:helpPopup struct" style="font-weight:bold">struct</a> with fields:
+
+    x: [1×1 sym]
+    y: [1×1 sym]
+    z: [1×1 sym]
+
+atb.x
+ 
+ans =
+ 
+2
+ 
+atb.y
+ 
+ans =
+ 
+3
+ 
+atb.z
+ 
+ans =
+ 
+5
+ 
+atb = solve(x+y+z==10,x-y+z==4,x+y-z==0,x,y,z)
+
+atb = 
+
+  <a href="matlab:helpPopup struct" style="font-weight:bold">struct</a> with fields:
+
+    x: [1×1 sym]
+    y: [1×1 sym]
+    z: [1×1 sym]
+
+solve(x+y+z==10,x-y+z==4,x+y-z==0,x,y,z)
+
+ans = 
+
+  <a href="matlab:helpPopup struct" style="font-weight:bold">struct</a> with fields:
+
+    x: [1×1 sym]
+    y: [1×1 sym]
+    z: [1×1 sym]
+
+%% Simboliskās const.
+a = vpa(2)
+ 
+a =
+ 
+2.0
+ 
+b = vpa(pi)
+ 
+b =
+ 
+3.1415926535897932384626433832795
+ 
+c = vpa(sqrt(2))
+ 
+c =
+ 
+1.4142135623730950488016887242097
+ 
+% vpa pārvērš skaitli par simbolisko constant'i
+% zīmju skaitu mainīšana
+didgits(100)
+{Undefined function or variable 'didgits'.
+} 
+didgits(100)
+{Undefined function or variable 'didgits'.
+} 
+digits(100)
+b = vpa(exp(1))
+ 
+b =
+ 
+2.71828182845904553488480814849026501178741455078125
+ 
+% vpa = Varible precision Arithmetic
+%% Rezultātu vienkāršošana
+syms x 
+y = 1/((x-1)*)(x-2));
+ y = 1/((x-1)*)(x-2));
+              ↑
+{Error: Invalid expression. When calling a function or indexing a variable, use parentheses. Otherwise, check
+for mismatched delimiters.
+} 
+y = 1/((x-1)*(x-2));
+diff(y)
+ 
+ans =
+ 
+- 1/((x - 1)*(x - 2)^2) - 1/((x - 1)^2*(x - 2))
+ 
+y = (x-4)*(x-5)/((x-1)*(x-2));
+diff(y)
+ 
+ans =
+ 
+(x - 4)/((x - 1)*(x - 2)) + (x - 5)/((x - 1)*(x - 2)) - ((x - 4)*(x - 5))/((x - 1)*(x - 2)^2) - ((x - 4)*(x - 5))/((x - 1)^2*(x - 2))
+ 
+y_atv = diff(y)
+ 
+y_atv =
+ 
+(x - 4)/((x - 1)*(x - 2)) + (x - 5)/((x - 1)*(x - 2)) - ((x - 4)*(x - 5))/((x - 1)*(x - 2)^2) - ((x - 4)*(x - 5))/((x - 1)^2*(x - 2))
+ 
+% Mēģināsim vienkāršot:
+simplify(y_atv)
+ 
+ans =
+ 
+(6*(x^2 - 6*x + 7))/(x^2 - 3*x + 2)^2
+ 
+%% citi vienkāršojumi
+syms x
+y = (x-3)*(x-4);
+y
+ 
+y =
+ 
+(x - 3)*(x - 4)
+ 
+expand(y)
+ 
+ans =
+ 
+x^2 - 7*x + 12
+ 
+atb = expand(y);
+factor(atb)
+ 
+ans =
+ 
+[ x - 3, x - 4]
+ 
+hprner(atb)
+{Undefined function or variable 'hprner'.
+} 
+horner(atb)
+ 
+ans =
+ 
+x*(x - 7) + 12
+ 
+%% Rezultātu "skaistāka" attēlošana
+y = (x-4)*(x-5)/((x-1)*(x-2));
+
+pretty(y)
+(x - 4) (x - 5)
+---------------
+(x - 1) (x - 2)
+
+%% Ko darit ar rezultatiem
+% Iedomāsimies 
+% dots:
+y = (x-4)*(x-5)/((x-1)*(x-2));
+% uzdevums ir atrast atvasinajumu un uzzimet to ar funkciju plot
+%% Risinājums:
+% 1. - definēsim simb mainīgos
+syms x
+y = (x-4)*(x-5)/((x-1)*(x-2));
+%% 2. atvasināt
+y_atv = diff(y)
+ 
+y_atv =
+ 
+(x - 4)/((x - 1)*(x - 2)) + (x - 5)/((x - 1)*(x - 2)) - ((x - 4)*(x - 5))/((x - 1)*(x - 2)^2) - ((x - 4)*(x - 5))/((x - 1)^2*(x - 2))
+ 
+y_atv = simplify(diff(y))
+ 
+y_atv =
+ 
+(6*(x^2 - 6*x + 7))/(x^2 - 3*x + 2)^2
+ 
+%% 3. - izteksmes vektorizācija
+% "punktiņu ieliksāna" pirms *
+y_v = vectorize(y)
+
+y_v =
+
+    '((x - 4).*(x - 5))./((x - 1).*(x - 2))'
+
+y_atv_v = vectorize(y_atv)
+
+y_atv_v =
+
+    '(6.*(x.^2 - 6.*x + 7))./(x.^2 - 3.*x + 2).^2'
+
+%% 4. saformesim x kā vektoru
+% x intervāls būs dots uzdevumā
+x = [-2:0.1:2-0.01];
+x = -2:0.1:2-0.01;
+% x pieder no [-2 ;2)
+% 5. ieliksim x - aprekinasim y
+y_n = (x - 4).*(x - 5))./((x - 1).*(x - 2))
+ y_n = (x - 4).*(x - 5))./((x - 1).*(x - 2))
+                       ↑
+{Error: Invalid expression. When calling a function or indexing a variable, use parentheses. Otherwise, check
+for mismatched delimiters.
+} 
+y_n = (x - 4).*(x - 5))./((x - 1).*(x - 2));
+ y_n = (x - 4).*(x - 5))./((x - 1).*(x - 2));
+                       ↑
+{Error: Invalid expression. When calling a function or indexing a variable, use parentheses. Otherwise, check
+for mismatched delimiters.
+} 
+y_n = eval(y = vectorize(y)
+ y_n = eval(y = vectorize(y)
+              ↑
+{Error: Incorrect use of '=' operator. To assign a value to a variable, use '='. To compare values for
+equality, use '=='.
+} 
+y_n = eval(vectorize(y)
+ y_n = eval(vectorize(y)
+                        ↑
+{Error: Invalid expression. When calling a function or indexing a variable, use parentheses. Otherwise, check
+for mismatched delimiters.
+} 
+y_n = eval(vectorize(y))
+
+y_n =
+
+   1.0e+16 *
+
+  Columns 1 through 10
+
+    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000
+
+  Columns 11 through 20
+
+    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000
+
+  Columns 21 through 30
+
+    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000
+
+  Columns 31 through 40
+
+   -2.7022   -0.0000   -0.0000   -0.0000   -0.0000   -0.0000   -0.0000   -0.0000   -0.0000   -0.0000
+
+%% 6. solis zīmēt
+plot(x,y_n,x,y_atv_n)
+{Undefined function or variable 'y_atv_n'.
+} 
+y_atv_n = eval(vectorize(y_atv))
+
+y_atv_n =
+
+   1.0e+31 *
+
+  Columns 1 through 10
+
+    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000
+
+  Columns 11 through 20
+
+    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000
+
+  Columns 21 through 30
+
+    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000
+
+  Columns 31 through 40
+
+    6.0847    0.0000    0.0000    0.0000    0.0000    0.0000   -0.0000   -0.0000   -0.0000   -0.0000
+
+plot(x,y_n,x,y_atv_n)
+ylim([-100 100])
+%% 7. grafiku anotācija
+% izteksmes skaista attelosana -2 
+y_ltx = latex(y)
+
+y_ltx =
+
+    '\frac{\left(x-4\right)\,\left(x-5\right)}{\left(x-1\right)\,\left(x-2\right)}'
+
+y_atv_ltx_ = latex(y_atv)
+
+y_atv_ltx_ =
+
+    '\frac{6\,\left(x^2-6\,x+7\right)}{{\left(x^2-3\,x+2\right)}^2}'
+
+legend\
+ legend\
+        ↑
+{Error: Invalid expression. Check for missing or extra characters.
+} 
+legend
+h=legend(['$',y_ltx,'$'],['$',y_atv_ltx,'$']);
+{Undefined function or variable 'y_atv_ltx'.
+} 
+h=legend(['$',y_ltx,'$'],['$',y_atv_ltx_,'$']);
+[Warning: Error updating Legend.
+
+ String scalar or character vector must have valid interpreter syntax:
+$\frac{\left(x-4\right)\,\left(x-5\right)}{\left(x-1\right)\,\left(x-2\right)}$
+] 
+[Warning: Error updating Legend.
+
+ String scalar or character vector must have valid interpreter syntax:
+$\frac{6\,\left(x^2-6\,x+7\right)}{{\left(x^2-3\,x+2\right)}^2}$
+] 
+set(h,'Interpreter','Latex')
+diary off
